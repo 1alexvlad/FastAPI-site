@@ -6,7 +6,7 @@ class Rooms(Base):
     __tablename__ = 'rooms'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    hotel_id = ForeignKey('hotels.id', nullable=False)
+    hotel_id = Column(ForeignKey("hotels.id"), nullable=False)
     name = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     quantity = Column(Integer, nullable=False)

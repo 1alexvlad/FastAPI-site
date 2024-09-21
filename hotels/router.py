@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Query
+from fastapi import APIRouter
 from hotels.service import HotelService
 from hotels.schema import SHotel
 
