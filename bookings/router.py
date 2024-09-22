@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request, Depends
 from bookings.schema import SBookings
 from bookings.service import BookingService
+from users.models import Users
+from users.dependes import get_current_user
 from typing import List
 
 
@@ -9,6 +11,6 @@ router = APIRouter(
     tags=['Бронирования']
 )
 
-@router.get('', response_model=List[SBookings])
-async def ookings_all() -> List[SBookings]:
+@router.get('')
+async def get_bookings(user: Users = Depends(get_current_user)):
     return await BookingService.find_all()
