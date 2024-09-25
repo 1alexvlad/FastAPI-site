@@ -2,8 +2,7 @@ import os
 from fastapi import Request, Depends
 from jose import jwt 
 from jose import JWTError
-from datetime import datetime
-from users.models import Users
+from datetime import datetime, timezone
 from users.service import UserService
 from exceptions import *
 
@@ -32,7 +31,9 @@ async def get_current_user(token: str = Depends(get_toket)):
 
     expire: str = payload.get('exp')
     
-    if (not expire) or (int(expire) < int(datetime.utcnow().timestamp())):
+    # Получаем текущее время в UTC
+    current_timestamp = datetime.now(timezone.utc).timestamp()
+    if (not expire) or (int(expire) < int(current_timestamp)):
         raise TokenExpiredException
     
     user_id: str = payload.get('sub')

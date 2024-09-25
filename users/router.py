@@ -6,13 +6,19 @@ from users.service import UserService
 from exceptions import *
 from users.auth import get_password_hash, authenticated_user, create_access_token
 
-router = APIRouter(
+auth_router = APIRouter(
     prefix='/auth',
+    tags=['Auth']
+)
+
+user_router = APIRouter(
+    prefix='/users',
     tags=['Пользователи']
 )
 
 
-@router.post('/register')
+
+@auth_router.post('/register')
 async def register_user(user_data: SUser):
     existing_user = await UserService.find_one_or_none(email=user_data.email)
     if existing_user:
@@ -21,7 +27,7 @@ async def register_user(user_data: SUser):
     await UserService.add(email=user_data.email, password=hashed_password)
     
 
-@router.post('/login')
+@auth_router.post('/login')
 async def login_user(response: Response, user_data: SUser):
     user = await authenticated_user(user_data.email, user_data.email)
     if not user:
@@ -30,10 +36,10 @@ async def login_user(response: Response, user_data: SUser):
     response.set_cookie('booking_access_token', access_token, httponly=True)
     return access_token
 
-@router.post('/logout')
+@auth_router.post('/logout')
 async def logout_user(response: Response):
     response.delete_cookie('booking_access_token')
 
-@router.get('/me')
+@user_router.get('/me')
 async def read_user_me(current_user: Users = Depends(get_current_user)):
     return current_user

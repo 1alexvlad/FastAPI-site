@@ -11,11 +11,3 @@ class SBookings(BaseModel):
     price: int
     total_price: int
     total_days: int
-
-
-    @field_validator("date_to")
-    def check_dates(cls, date_to, value):
-        if 'date_from' in value and date_to <= value['date_from']:
-            raise ValueError('date_to должен быть больше чем date_from')
-        return date_to
-    

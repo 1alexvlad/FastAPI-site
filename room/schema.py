@@ -4,8 +4,9 @@ from pydantic import BaseModel, field_validator
 
 
 class SRoom(BaseModel):
+    id: int
     hotel_id: int  
-    name: str  
+    name: str 
     price: int  
     quantity: int  
     services: List[str]  
