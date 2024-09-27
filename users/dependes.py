@@ -1,12 +1,12 @@
 import os
-from fastapi import Request, Depends
-from jose import jwt 
-from jose import JWTError
 from datetime import datetime, timezone
-from users.service import UserService
-from exceptions import *
 
 from dotenv import load_dotenv
+from fastapi import Depends, Request
+from jose import JWTError, jwt
+
+from exceptions import *
+from users.service import UserService
 
 load_dotenv()
 

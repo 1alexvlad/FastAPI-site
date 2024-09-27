@@ -1,10 +1,12 @@
 from datetime import date, datetime, timedelta
-from typing import List, Optional
-from fastapi import APIRouter, Query
-from hotels.service import HotelService
-from hotels.schema import SHotel, SHotelResponse
-from exceptions import HotelsIsNotFound, CannotBookHotelForLongPeriod, DateFromCannotBeAfterDateTo
+from typing import List
 
+from fastapi import APIRouter, Query
+
+from exceptions import (CannotBookHotelForLongPeriod,
+                        DateFromCannotBeAfterDateTo, HotelsIsNotFound)
+from hotels.schema import SHotelResponse
+from hotels.service import HotelService
 
 router = APIRouter(
     prefix='/hotels',
@@ -16,7 +18,8 @@ router = APIRouter(
 async def get_hotels_by_location(
     location: str, 
     date_from: date = Query(..., description=f"{datetime.now().date()}"), 
-    date_to: date = Query(..., description=f"{(datetime.now() + timedelta(days=7)).date()}") 
+    date_to: date = Query(
+        ..., description=f"{(datetime.now() + timedelta(days=7)).date()}"),
     ) -> List[SHotelResponse]:
 
     if date_from > date_to:

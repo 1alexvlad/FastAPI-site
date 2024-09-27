@@ -1,10 +1,12 @@
 from datetime import date
+
 from sqlalchemy import select
-from hotels.models import Hotels 
+
+from database import async_session_maker
+from hotels.models import Hotels
+from hotels.schema import SHotel
 from room.models import Rooms
 from service.base import BaseService
-from database import async_session_maker
-from hotels.schema import SHotel
 
 
 class HotelService(BaseService):

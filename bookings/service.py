@@ -1,11 +1,14 @@
-from bookings.models import Bookings
-from service.base import BaseService
 from datetime import date
-from database import async_session_maker, engine
-from sqlalchemy import delete, select, and_, or_, func, insert, update
-from room.models import Rooms
+
+from sqlalchemy import and_, delete, func, insert, or_, select, update
+
+from bookings.models import Bookings
 from bookings.schema import SBookings
+from database import async_session_maker
 from exceptions import BookingWasNotFound
+from room.models import Rooms
+from service.base import BaseService
+
 
 class BookingService(BaseService):
     model = Bookings

@@ -1,12 +1,13 @@
-from fastapi import APIRouter, Request, Depends
+from datetime import date
+from typing import List
+
+from fastapi import APIRouter, Depends
+
 from bookings.schema import SBookings
 from bookings.service import BookingService
-from users.models import Users
-from users.dependes import get_current_user
-from typing import List
-from datetime import date
 from exceptions import RoomCannotBeBooked
-
+from users.dependes import get_current_user
+from users.models import Users
 
 router = APIRouter(
     prefix='/bookings',
