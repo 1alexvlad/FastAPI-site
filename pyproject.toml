@@ -16,3 +16,5 @@ check_diff = true
 imports = ["database"]
 
 [tool.pyright]
+[tool.pyright]
+typeCheckingMode = "basic"  
