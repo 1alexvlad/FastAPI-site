@@ -3,11 +3,12 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 from fastapi_versioning import version
-
+from pydantic import TypeAdapter
 
 from bookings.schema import SBookings
 from bookings.service import BookingService
 from exceptions import RoomCannotBeBooked
+from tasks.tasks import send_booking_confirmation_email
 from users.dependes import get_current_user
 from users.models import Users
 
@@ -29,7 +30,10 @@ async def add_booking(room_id: int, date_from: date, date_to: date,
     booking = await BookingService.add(user.id, room_id, date_from, date_to)
     if not booking:
         raise RoomCannotBeBooked
-    return booking
+
+    booking_dict = TypeAdapter(SBookings, booking).dict()
+    send_booking_confirmation_email.delay(booking_dict , user.email)
+    return booking_dict
 
 
 @router.delete('/{booking_id}')

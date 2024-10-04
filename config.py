@@ -35,4 +35,12 @@ class Settings(BaseSettings):
     class Config:
         env_file = '.env'
 
+    REDIS_HOST: str
+    REDIS_PORT: int
+
+    SMTP_HOST: str
+    SMTP_PORT: int
+    SMTP_USER: str
+    SMTP_PASS: str
+
 settings = Settings()
