@@ -39,3 +39,13 @@ async def authenticated_user(email: EmailStr, password: str):
     if not user and not verify_password(password, user.password):
         return None
     return user
+
+
+async def create_refresh_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + timedelta(days=90)
+    to_encode.update({'exp': expire})
+    encoded_jwt = jwt.encode(
+        to_encode, SECRET_KEY, algorithm=ALGORITHM
+    )
+    return encoded_jwt

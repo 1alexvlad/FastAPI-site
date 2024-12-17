@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Request, Response
 
 from exceptions import *
 from users.auth import (authenticated_user, create_access_token,
-                        get_password_hash)
-from users.dependes import get_current_user
+                        create_refresh_token, get_password_hash)
+from users.dependencies import get_current_user, handle_refresh_token
 from users.models import Users
 from users.schema import SUser
 from users.service import UserService
@@ -35,13 +35,20 @@ async def login_user(response: Response, user_data: SUser):
     if not user:
         raise IncorrectEmailOrPasswordException
     access_token = create_access_token({'sub': str(user.id)})
+    refresh_token = await create_refresh_token({'sub': str(user.id)})
     response.set_cookie('booking_access_token', access_token, httponly=True)
+    response.set_cookie('booking_refresh_token', refresh_token, httponly=True)
     return access_token
 
 @auth_router.post('/logout')
 async def logout_user(response: Response):
     response.delete_cookie('booking_access_token')
+    response.delete_cookie('booking_refresh_token')
 
 @user_router.get('/me')
 async def read_user_me(current_user: Users = Depends(get_current_user)):
     return current_user
+
+@user_router.post('/refresh-token')
+async def refresh_token(response: Response, request: Request):
+    return await handle_refresh_token(response, request)

@@ -9,7 +9,7 @@ from bookings.schema import SBookings
 from bookings.service import BookingService
 from exceptions import RoomCannotBeBooked
 from tasks.tasks import send_booking_confirmation_email
-from users.dependes import get_current_user
+from users.dependencies import get_current_user
 from users.models import Users
 
 router = APIRouter(
