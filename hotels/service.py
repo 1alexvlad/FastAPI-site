@@ -41,7 +41,7 @@ class HotelService(BaseService):
                         id=hotel.id,
                         name=hotel.name,
                         location=hotel.location,
-                        services=hotel.services if isinstance(hotel.services, list) else [],  #
+                        services=hotel.services if isinstance(hotel.services, list) else [],
                         room_quantity=hotel.room_quantity,
                         image_id=hotel.image_id,
                         rooms_left=rooms_left 

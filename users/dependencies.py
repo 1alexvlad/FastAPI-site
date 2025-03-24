@@ -33,7 +33,6 @@ async def get_current_user(token: str = Depends(get_toket)):
 
     expire: str = payload.get('exp')
     
-    # Получаем текущее время в UTC
     current_timestamp = datetime.now(timezone.utc).timestamp()
     if (not expire) or (int(expire) < int(current_timestamp)):
         raise TokenExpiredException

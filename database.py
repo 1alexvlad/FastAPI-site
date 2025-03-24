@@ -7,7 +7,6 @@ from config import settings
 
 if settings.MODE == 'TEST':
     DATABASE_URL = settings.TEST_DATABASE_URL
-    # Важно, когда подлючаемся к тестовой бд задать некоторые параметры
     DATABASE_PARAMS = {"poolclass": NullPool}
 else:
     DATABASE_URL = settings.DATABASE_URL

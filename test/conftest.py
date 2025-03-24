@@ -17,7 +17,6 @@ from users.models import Users
 @pytest.fixture(scope="session", autouse=True)
 async def prepare_database():
     assert settings.MODE == 'TEST'
-    # Очищаем и создаем таблицы
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
@@ -28,17 +27,14 @@ async def prepare_database():
         except FileNotFoundError:
             raise Exception(f"Mock file for {model} not found.") 
     
-    # Загружаем данные из mock файлов
     hotels = open_mock_json("hotels")
     rooms = open_mock_json("rooms")
     users = open_mock_json("users")
     bookings = open_mock_json("bookings")
-    # Преобразуем даты
     for booking in bookings:
         booking['date_from'] = datetime.strptime(booking['date_from'], "%Y-%m-%d")
         booking['date_to'] = datetime.strptime(booking['date_to'], "%Y-%m-%d")
     async with async_session_maker() as session:
-        # Вставляем данные в таблицы
         await session.execute(insert(Hotels).values(hotels))
         await session.execute(insert(Rooms).values(rooms))
         await session.execute(insert(Users).values(users))

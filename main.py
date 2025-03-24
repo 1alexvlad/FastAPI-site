@@ -20,7 +20,6 @@ from users.router import auth_router, user_router
 
 load_dotenv()
 
-# Получаем значения переменных окружения
 REDIS_HOST = os.getenv("REDIS_HOST")
 REDIS_PORT = os.getenv("REDIS_PORT")
 
@@ -37,10 +36,6 @@ app.include_router(router_room)
 app = VersionedFastAPI(app,
     version_format='{major}',
     prefix_format='/v{major}',
-    # description='Greet users with a nice message',
-    # middleware=[
-    #     Middleware(SessionMiddleware, secret_key='mysecretkey')
-    # ]
 )
 
 @asynccontextmanager

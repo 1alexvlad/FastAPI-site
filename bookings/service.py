@@ -38,7 +38,6 @@ class BookingService(BaseService):
                 )
             ).cte('booked_rooms')
 
-            # Запрос для получения количества оставшихся комнат
             get_rooms_left = select(
                 (Rooms.quantity - func.coalesce(func.count(booked_rooms.c.room_id), 0)).label('rooms_left')
             ).select_from(Rooms).outerjoin(
@@ -53,7 +52,6 @@ class BookingService(BaseService):
                 price_result = await session.execute(get_price)
                 price: int = price_result.scalar()
 
-                # Добавляем новое бронирование
                 add_booking = insert(Bookings).values(
                     room_id=room_id,
                     user_id=user_id,
@@ -65,7 +63,6 @@ class BookingService(BaseService):
                 new_booking = await session.execute(add_booking)
                 await session.commit()
 
-                # Обновляем количество доступных комнат
                 update_rooms_quantity = (
                     update(Rooms)
                     .where(Rooms.id == room_id)
@@ -75,7 +72,6 @@ class BookingService(BaseService):
                 await session.execute(update_rooms_quantity)
                 await session.commit() 
 
-                # Возвращаем экземпляр SBookings напрямую
                 return SBookings(
                     id=new_booking.scalar().id,
                     room_id=room_id,
